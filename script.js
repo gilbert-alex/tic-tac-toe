@@ -2,10 +2,6 @@
 const TicTakToe = (function () {
 
     function GameBoard() {
-        /* 3x3 grid
-            An array of three member arrays of size 3
-            Each child array is a space to hold player information
-        */
         const size = 3;
         const board = [];
     
@@ -18,7 +14,6 @@ const TicTakToe = (function () {
         }
     
         const getBoard = () => board;
-        const getSpace = (row, col) => board[row][col];
         const fillSpace = (symbol, row, col) => {
             if (board[row][col].getValue() === null) {
                 board[row][col].addSymbol(symbol);
@@ -27,7 +22,6 @@ const TicTakToe = (function () {
                 console.log(`Invalid Move: Row:${row} Col:${col} is already taken.`)
                 return false;
             }
-            
         }
         const getValues = () => {
             let values = board.map( (row) => row.map( (cell) => {
@@ -36,8 +30,7 @@ const TicTakToe = (function () {
             return values;
         }
     
-        // exposed to the IIFE
-        return {getBoard, getSpace, fillSpace, getValues};
+        return {getBoard, fillSpace, getValues};
     }
 
     function BoardSpace() {
@@ -95,13 +88,11 @@ const TicTakToe = (function () {
         const checkWinner = (row, col) => {
             // check win along row
             let matchedRow = board.getValues()[row].filter((space) => space === currentPlayer.symbol);
-            console.log(`row: ${matchedRow}`);
+            // console.log(`row: ${matchedRow}`);
 
             // check win along column
-            // let activeCol = board.getBoard().map((row) => row[col].getValue());
-            // let matchedCol = activeCol.filter((space) => space === currentPlayer.symbol);
             let matchedCol = board.getValues().map((row) => row[col]).filter((space) => space === currentPlayer.symbol);
-            console.log(`col: ${matchedCol}`);
+            // console.log(`col: ${matchedCol}`);
 
             // check win along diagonal top left bottom right (tlbr)
             let tlbr = [];
@@ -109,7 +100,7 @@ const TicTakToe = (function () {
                 tlbr.push(board.getBoard()[i][i].getValue());
             }
             let matchedTlbr = tlbr.filter((space) => space === currentPlayer.symbol);
-            console.log(`d1: ${matchedTlbr}`);
+            // console.log(`d1: ${matchedTlbr}`);
 
             // check win along diagonal bottom left top right (bltr)
             let bltr = [];
@@ -117,7 +108,7 @@ const TicTakToe = (function () {
                 bltr.push(board.getValues()[j].at(-(j+1)));
             }
             let matchedBltr = bltr.filter((space) => space === currentPlayer.symbol);
-            console.log(`d2: ${matchedBltr}`);
+            // console.log(`d2: ${matchedBltr}`);
 
             if (matchedRow.length === 3 ||
                 matchedCol.length === 3 ||
@@ -137,7 +128,7 @@ const TicTakToe = (function () {
             if (emptySpaces === 0) {
                 gameOver = true
             };
-            console.log(`there are ${emptySpaces} empty spaces left`);
+            // console.log(`there are ${emptySpaces} empty spaces left`);
         }
         const endGame = () => {
             if (gameOver) {
@@ -149,7 +140,7 @@ const TicTakToe = (function () {
                 if (makeMove(row, col)) {
                     checkWinner(row, col);
                     checkTie();
-                    viewBoard();
+                    // viewBoard();
                     endGame();
                     switchPlayer();
                 } else {
@@ -160,20 +151,33 @@ const TicTakToe = (function () {
                 console.log('game is already over');
             }
         }
+        const getPlayer = () => currentPlayer.symbol;
 
         // public methods
-        return {getBoard, playerTurn};
+        return {playerTurn, getPlayer};
     }
 
     // creating method
     return {GameController};
 })();
 
+function screenController() {
+    const game = TicTakToe.GameController();
+    const boardDiv = document.querySelector('.board');
 
+    const boardSpaces = boardDiv.querySelectorAll('button');
+    boardSpaces.forEach((space) => {
+        space.addEventListener('click', () => {
+            let [row, col] = space.getAttribute('name').split('-');
+            space.textContent = game.getPlayer();
+            game.playerTurn(row, col);
+        })
+    })
+}
 
 
 // test
-const game1 = TicTakToe.GameController();
+// const game1 = TicTakToe.GameController();
 
 /* test invalid move and auto player switch*/
 // game1.playerTurn(0,0);
@@ -218,3 +222,6 @@ const game1 = TicTakToe.GameController();
 // game1.playerTurn(0,2);
 // game1.playerTurn(1,2);
 // game1.playerTurn(2,2);
+
+/* test display */
+screenController();
