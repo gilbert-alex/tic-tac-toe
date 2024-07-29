@@ -142,19 +142,24 @@ const TicTakToe = (function () {
                     checkTie();
                     // viewBoard();
                     endGame();
-                    switchPlayer();
                 } else {
                     console.log('try again');
+                    return false;
                 };
+                return true;
 
             } else {
                 console.log('game is already over');
+                return false;
             }
         }
         const getPlayer = () => currentPlayer.symbol;
 
+        const getValues = () => board.getValues();
+
+
         // public methods
-        return {playerTurn, getPlayer};
+        return {playerTurn, getPlayer, getValues, switchPlayer};
     }
 
     // creating method
@@ -163,65 +168,24 @@ const TicTakToe = (function () {
 
 function screenController() {
     const game = TicTakToe.GameController();
+    const player = document.querySelector('.player');
     const boardDiv = document.querySelector('.board');
 
     const boardSpaces = boardDiv.querySelectorAll('button');
     boardSpaces.forEach((space) => {
         space.addEventListener('click', () => {
+
             let [row, col] = space.getAttribute('name').split('-');
-            space.textContent = game.getPlayer();
-            game.playerTurn(row, col);
+            if (game.playerTurn(row, col)) {
+                const memory = game.getValues();
+                console.log(memory[row][col]);
+                space.textContent = memory[row][col];
+                game.switchPlayer();
+            }
+
         })
     })
 }
-
-
-// test
-// const game1 = TicTakToe.GameController();
-
-/* test invalid move and auto player switch*/
-// game1.playerTurn(0,0);
-// game1.playerTurn(0,0);
-// game1.playerTurn(1,1);
-
-/* test row end game condition */
-// game1.playerTurn(0,0);
-// game1.playerTurn(1,0);
-// game1.playerTurn(0,1);
-// game1.playerTurn(1,1);
-// game1.playerTurn(0,2);
-
-/* test column end game condition */
-// game1.playerTurn(0,0);
-// game1.playerTurn(0,1);
-// game1.playerTurn(1,0);
-// game1.playerTurn(1,1);
-// game1.playerTurn(2,0);
-
-/* test tlbr end game condition */
-// game1.playerTurn(0,0);
-// game1.playerTurn(1,0);
-// game1.playerTurn(1,1);
-// game1.playerTurn(0,2);
-// game1.playerTurn(2,2);
-
-/* test bltr end game condition */
-// game1.playerTurn(2,0);
-// game1.playerTurn(0,1);
-// game1.playerTurn(1,1);
-// game1.playerTurn(2,1);
-// game1.playerTurn(0,2);
-
-/* test tie end game condition */
-// game1.playerTurn(0,0);
-// game1.playerTurn(0,1);
-// game1.playerTurn(1,0);
-// game1.playerTurn(1,1);
-// game1.playerTurn(2,1);
-// game1.playerTurn(2,0);
-// game1.playerTurn(0,2);
-// game1.playerTurn(1,2);
-// game1.playerTurn(2,2);
 
 /* test display */
 screenController();
