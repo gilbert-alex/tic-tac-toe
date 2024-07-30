@@ -25,7 +25,6 @@ body {
 button[id = new] {
     max-width: 75px;
     justify-self: center;
-    border: 1px solid red;
     padding: 5px;
 }
 
