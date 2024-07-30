@@ -158,6 +158,7 @@ function screenController() {
     const newBtn = document.getElementById('new');
     const playerDiv = document.querySelector('.player');
     const boardDiv = document.querySelector('.board');
+    const boardSpaces = boardDiv.querySelectorAll('button'); //new
 
     newBtn.addEventListener('click', () => newGame());
 
@@ -165,6 +166,8 @@ function screenController() {
         // user input names
         const p1Name = document.getElementById('p1').value;
         const p2Name = document.getElementById('p2').value;
+
+        boardSpaces.forEach(space => space.textContent = '');
 
         // call for new game object
         const game = TicTakToe.GameController(p1Name, p2Name);
@@ -176,7 +179,7 @@ function screenController() {
 
         playerDiv.textContent = `${game.getPlayer().name}'s turn`
 
-        const boardSpaces = boardDiv.querySelectorAll('button');
+        // const boardSpaces = boardDiv.querySelectorAll('button');
 
         boardSpaces.forEach((btn) => {
             btn.addEventListener('click', () => {

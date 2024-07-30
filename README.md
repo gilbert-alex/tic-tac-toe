@@ -15,6 +15,5 @@ The game UI uses the ScreenController function to connect to the game play which
 
 ## Planned updates
 - I'll make the UI better but have prioritized OOP practice
-- A reset button to start a new game without refreshing the browser
 - This would be a good place to learn CSS animations 
 - Potentially include an AI opponent
